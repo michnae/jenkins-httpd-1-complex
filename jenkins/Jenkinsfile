@@ -97,6 +97,7 @@ pipeline {
                     sh 'scp jenkins@10.128.0.7:/home/jenkins/pytest_unit.xml .'
                     junit 'pytest_unit.xml'
                 }
-        }
+            }
+        }    
     }       
 }
