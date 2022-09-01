@@ -70,6 +70,7 @@ pipeline {
             }
             post {
                 always {
+                    sh 'pwd'
                     junit '/home/jenkins/pytest_unit.xml'
                 }
             }
