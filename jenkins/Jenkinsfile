@@ -70,7 +70,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'pytest_unit.xml'
+                    junit './pytest_unit.xml'
                 }
             }
         }
