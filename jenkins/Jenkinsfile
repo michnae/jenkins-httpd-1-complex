@@ -62,9 +62,9 @@ pipeline {
                             )
             }
         }
-        stage('Test on DEV server') {
+        stage('Test Application on Webserver') {
             steps {
-                echo 'Test on DEV server'
+                echo 'Test Application on Webserver'
                 sh 'pwd'
                 sshPublisher(
                     publishers: [
