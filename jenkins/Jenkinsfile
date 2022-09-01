@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('install requirements') {
+            steps {
+                echo 'install requirements'
+                sh 'pwd'                              
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'jenkins-httpd-ubuntu-4', 
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: 'pip install -r requirements.txt', 
+                                    execTimeout: 120000, 
+                                    flatten: false, 
+                                    makeEmptyDirs: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+', 
+                                    remoteDirectory: '', 
+                                    remoteDirectorySDF: false, 
+                                    removePrefix: '', 
+                                    sourceFiles: 'requirements.txt')], 
+                                    usePromotionTimestamp: false, 
+                                    useWorkspaceInPromotion: false, 
+                                    verbose: false
+                                    )
+                                ]
+                            )
+            }
+        }       
+        stage('Start Flask WebApp') {
+            steps {
+                echo 'Start Flask WebApp'
+                sh 'pwd'
+                //sh "ssh jenkins@35.233.184.244 'timeout 10s nohup python3 app.py &'"                
+            }
+        }
+        stage('Test on DEV server') {
+            steps {
+                echo 'Test on DEV server'
+                sh 'pwd'
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'jenkins-httpd-ubuntu-4', 
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: '/usr/bin/python3 -m pytest --junit-xml=pytest_unit.xml || true', 
+                                    execTimeout: 120000, 
+                                    flatten: false, 
+                                    makeEmptyDirs: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+', 
+                                    remoteDirectory: '', 
+                                    remoteDirectorySDF: false, 
+                                    removePrefix: '', 
+                                    sourceFiles: 'test_flaskapp.py')], 
+                                    usePromotionTimestamp: false, 
+                                    useWorkspaceInPromotion: false, 
+                                    verbose: false
+                                    )
+                                ]
+                            )
+            }
+            post {
+                always {
+                    junit 'pytest_unit.xml'
+                }
+            }
+        }
+       
+    }
+}
