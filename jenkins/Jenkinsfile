@@ -60,7 +60,6 @@ pipeline {
                                     )
                                 ]
                             )
-                //sh "ssh jenkins@35.233.184.244 'timeout 10s nohup python3 app.py &'"                
             }
         }
         stage('Test on DEV server') {
@@ -92,13 +91,12 @@ pipeline {
                                 ]
                             )
             }
-            //post {
-            //    always {
-            //        sh 'pwd'
-            //        junit '/home/jenkins/pytest_unit.xml'
-            //    }
-            }
+            post {
+                always {
+                    sh 'pwd'
+                    sh 'scp jenkins@10.128.0.7:/home/jenkins/pytest_unit.xml .'
+                    junit 'pytest_unit.xml'
+                }
         }
-       
-    }
-
+    }       
+}
