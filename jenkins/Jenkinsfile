@@ -44,7 +44,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false, 
                                     excludes: '', 
-                                    execCommand: 'cp flaskapp.py /var/www/html/flaskapp/', 
+                                    execCommand: 'cp flaskapp.py flaskapp.wsgi /var/www/html/flaskapp/', 
                                     execTimeout: 120000, 
                                     flatten: false, 
                                     makeEmptyDirs: false, 
@@ -53,7 +53,7 @@ pipeline {
                                     remoteDirectory: '', 
                                     remoteDirectorySDF: false, 
                                     removePrefix: '', 
-                                    sourceFiles: 'requirements.txt')], 
+                                    sourceFiles: 'flaskapp.py flaskapp.wsgi')], 
                                     usePromotionTimestamp: false, 
                                     useWorkspaceInPromotion: false, 
                                     verbose: false
