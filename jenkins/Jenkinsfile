@@ -32,10 +32,34 @@ pipeline {
                             )
             }
         }       
-        stage('Start Flask WebApp') {
+        stage('Copy Flaskapp to Webserver') {
             steps {
-                echo 'Start Flask WebApp'
+                echo 'Copy Flaskapp to Webserver'
                 sh 'pwd'
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'jenkins-httpd-ubuntu-4', 
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: 'cp flaskapp.py flaskapp.wsgi /var/www/html/flaskapp/', 
+                                    execTimeout: 120000, 
+                                    flatten: false, 
+                                    makeEmptyDirs: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+', 
+                                    remoteDirectory: '', 
+                                    remoteDirectorySDF: false, 
+                                    removePrefix: '', 
+                                    sourceFiles: 'requirements.txt')], 
+                                    usePromotionTimestamp: false, 
+                                    useWorkspaceInPromotion: false, 
+                                    verbose: false
+                                    )
+                                ]
+                            )
                 //sh "ssh jenkins@35.233.184.244 'timeout 10s nohup python3 app.py &'"                
             }
         }
@@ -68,11 +92,11 @@ pipeline {
                                 ]
                             )
             }
-            post {
-                always {
-                    sh 'pwd'
-                    junit '/home/jenkins/pytest_unit.xml'
-                }
+            //post {
+            //    always {
+            //        sh 'pwd'
+            //        junit '/home/jenkins/pytest_unit.xml'
+            //    }
             }
         }
        
