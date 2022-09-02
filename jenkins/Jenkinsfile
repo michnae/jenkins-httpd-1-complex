@@ -14,7 +14,7 @@ pipeline {
                                 sshTransfer(
                                     cleanRemote: false, 
                                     excludes: '', 
-                                    execCommand: 'pip install -r requirements.txt', 
+                                    execCommand: 'sudo pip install -r requirements.txt', 
                                     execTimeout: 120000, 
                                     flatten: false, 
                                     makeEmptyDirs: false, 
